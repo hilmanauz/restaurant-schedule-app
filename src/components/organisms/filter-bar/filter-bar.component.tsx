@@ -80,7 +80,7 @@ export function FilterBar() {
             [page, date, time]
         )
     return (
-        <div className="gap-4 md:col-span-1 space-y-5">
+        <div className="gap-4 md:col-span-1 col-span-3 space-y-5">
             {data?.user.role === 'admin' && (
                 <>
                     <Button

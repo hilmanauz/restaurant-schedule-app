@@ -14,7 +14,7 @@ import { useSession } from 'next-auth/react'
 import { useFetchData } from '@/hooks/useFetchData'
 import { useFetchApi } from '@/providers/fetch-api-provider'
 import { mutate } from 'swr'
-import { BsThreeDotsVertical } from 'react-icons/bs'
+import { BsArrowRight, BsClockFill, BsThreeDotsVertical } from 'react-icons/bs'
 
 const isBetween = require('dayjs/plugin/isBetween')
 dayjs.extend(isBetween)
@@ -56,8 +56,8 @@ export function RestaurantCard({ item, setSelectedRestaurant }: RestaurantCardPr
 
     return (
         <div className="transition-all rounded-lg bg-white hover:-translate-y-0.5 hover:translate-x-0.5 hover:shadow-md border-2 w-full">
-            <div className="px-5 py-3 flex justify-between" onClick={toggle}>
-                <div className="flex gap-x-1 items-center">
+            <div className="px-5 py-3 flex gap-x-4 justify-between" onClick={toggle}>
+                <div className="flex gap-x-1 items-center w-[50%] lg:w-fit">
                     {data?.user.role === 'admin' && (
                         <Menu shadow="md" withinPortal withArrow>
                             <Menu.Target>
@@ -120,20 +120,20 @@ export function RestaurantCard({ item, setSelectedRestaurant }: RestaurantCardPr
                     </Text>
                     <div
                         className={classNames(
-                            'transform transition',
+                            'transform transition ml-auto',
                             !opened ? 'rotate-0' : 'rotate-180'
                         )}
                     >
                         <BiChevronDown size={20} />
                     </div>
                 </div>
-                <Text className="flex items-center gap-x-1" fz="11px">
+                <Text className="flex flex-col lg:flex-row items-center gap-x-1" fz="11px">
                     {date
                         ? dayjs(date).format('ddd')
                         : time
                         ? filterSchedule?.map((el) => el.day_of_week).join(', ')
                         : 'Today'}{' '}
-                    <BiArrowFromLeft />{' '}
+                    <BiArrowFromLeft className="hidden lg:flex" />{' '}
                     <Text fw={'bold'}>
                         {date && filterSchedule?.length ? (
                             `${formatHour(filterSchedule[0].open_time)} - ${formatHour(
@@ -152,11 +152,11 @@ export function RestaurantCard({ item, setSelectedRestaurant }: RestaurantCardPr
                 </Text>
             </div>
             <Collapse in={opened}>
-                <div className="px-5 pb-3 pt-1 flex gap-x-4">
+                <div className="px-5 pb-3 pt-1 grid lg:grid-cols-none lg:grid-flow-col lg:auto-cols-auto lg:gap-x-4 gap-y-2 lg:gap-y-0">
                     {item.schedules.map((el, idx) => (
                         <div
                             className={classNames(
-                                'py-2 px-4 rounded-md border text-center grow',
+                                'py-2 px-4 flex justify-between lg:flex-col rounded-md border lg:text-center',
                                 isHighlight(time, date, el) && 'outline outline-blue-500'
                             )}
                             key={idx}
@@ -164,10 +164,14 @@ export function RestaurantCard({ item, setSelectedRestaurant }: RestaurantCardPr
                             <Text fz="base" fw={'bold'}>
                                 {el.day_of_week}
                             </Text>
-                            <div className="gap-y-2 flex flex-col items-center">
+
+                            <div className="lg:gap-y-2 lg:gap-x-0.5 gap-x-2 flex lg:flex-col items-center">
                                 <Text fz="xs">{formatHour(el.open_time)}</Text>
-                                <div className="animate-bounce">
+                                <div className="animate-bounce hidden lg:flex">
                                     <MdDoubleArrow className="rotate-90 " />
+                                </div>
+                                <div className="flex lg:hidden">
+                                    <BsArrowRight size={12} />
                                 </div>
                                 <Text fz="xs">{formatHour(el.close_time)}</Text>
                             </div>
